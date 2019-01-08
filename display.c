@@ -41,26 +41,28 @@ void display_init(void) {
 		  (0b0000 << COM0B0)	// Disables all port operations
 		| (0b00 << WGM00)	// Normal mode (WGM02 in TCCR0B also 0)
 	;
-
+	
 	TCCR0B =
 		  (0b0 << WGM02)	// See WGM00 in TCCR0A
-		| (0b100 << CS00)	// Sets prescaler to clk_io/256
+		| (0b011 << CS00)	// Sets prescaler to clk_io/64
 	;
-
-	TIFR0 =
-		  (0b1 << TOV0)		// Enables overflow interrupt
+	
+	TIMSK0 =
+		  (0b1 << TOIE0)	// Enables overflow interrupt
 	;
 
 	/* Sets all display necessary pins to output */
-	DIGIT_DDR = 0xFF;
-	SEG_DDR = 0xFF;	
+	DDRC = 0xFF;
+	DDRD = 0xFF;	
 }
 
 void display_set(uint8_t *str) {
 	if ( strlen(str) !=  NUMBER_OF_DIGITS ) {
 		return;
 	}
-	strcpy(g_dbuffer, str);
+	for (int i=0; i < NUMBER_OF_DIGITS; i++) {
+		g_dbuffer[i] = str[NUMBER_OF_DIGITS-1 -i];
+	}
 }
 
 void _display_set_segments(uint8_t c) {
@@ -69,9 +71,9 @@ void _display_set_segments(uint8_t c) {
 	switch (c) {
 		case '0': segPort = 0x3F; break;
 		case '1': segPort = 0x06; break;
-		case '2': segPort = 0x5A; break;
+		case '2': segPort = 0x5B; break;
 		case '3': segPort = 0x4F; break;
-		case '4': segPort = 0x64; break;
+		case '4': segPort = 0x66; break;
 		case '5': segPort = 0x6D; break;
 		case '6': segPort = 0x7D; break;
 		case '7': segPort = 0x07; break;
@@ -79,18 +81,21 @@ void _display_set_segments(uint8_t c) {
 		case '9': segPort = 0x6F; break;
 		case ' ': segPort = 0x00; break;
 		case 'e': segPort = 0x79; break;
-		case 'h': segPort = 0x74; break;
+		case 'h': segPort = 0x76; break;
+		case 'l': segPort = 0x38; break;
 		case 'o': segPort = 0x5C; break;
 		case 'r': segPort = 0x50; break;
 		default: segPort = 0x08; break; // '_'
 	}
 
-	SEG_PORT = segPort;
+	PORTD = segPort;
 }
 
+
+#if 1 
 ISR(TIMER0_OVF_vect) {
 	/* Turn off all digits */
-	DIGIT_PORT = 0x00;
+	PORTC = 0x00;
 
 	/* Next digit */
 	g_digitIndex++;
@@ -102,5 +107,17 @@ ISR(TIMER0_OVF_vect) {
 	_display_set_segments(g_dbuffer[g_digitIndex]);
 
 	/* Turn on the next digit */
-	DIGIT_PORT |= (0b1 << g_digitPin[g_digitIndex]);
+	PORTC |= (0b1 << g_digitPin[g_digitIndex]);
 }
+#else
+uint8_t g_i = 0;
+ISR(TIMER0_OVF_vect) {
+	if ( g_i == 0 ) {
+		PORTC = 0xFF;
+		g_i = 1;
+	} else {
+		PORTC = 0x00;
+		g_i = 0;
+	}
+}
+#endif
