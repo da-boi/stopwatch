@@ -10,7 +10,7 @@ PPORT = /dev/ttyACM0
 PMMCU = m328p
 PFLAGS = -v
 
-OBJ = main.o display.o
+OBJ = main.o display.o time.o
 
 
 prog: $(PNAME).hex
