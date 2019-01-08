@@ -1,0 +1,41 @@
+#ifndef DISPLAY_H
+#define DISPLAY_H
+
+#ifdef TIMER_0
+#error "TIMER_0 already defined"
+#else
+#define TIMER_0
+#endif
+
+#define NUMBER_OF_DIGITS 6
+
+#define SEG_PORT PORTD
+#define SEG_DDR DDRD
+#define DIGIT_PORT PORTC
+#define DIGIT_DDR DDRC
+
+/* Digit pins */
+#define DIGIT_0 PC0
+#define DIGIT_1 PC1
+#define DIGIT_2 PC2
+#define DIGIT_3 PC3
+#define DIGIT_4 PC4
+#define DIGIT_5 PC5
+
+/* Segment pins */
+#define SEG_A PD0
+#define SEG_B PD1
+#define SEG_C PD2
+#define SEG_D PD3
+#define SEG_E PD4
+#define SEG_F PD5
+#define SEG_G PD6
+
+
+void display_init(void);
+
+void _display_set_segments(uint8_t c);
+
+void display_set(uint8_t *);
+
+#endif
