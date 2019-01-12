@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 #ifdef TIMER_0
-#error "TIMER_0 already defined"
+#error "Timer0 already used"
 #else
 #define TIMER_0
 #endif
@@ -32,9 +32,14 @@
 #define SEG_G PD6
 
 
-void display_init(void);
+extern uint8_t
+    *s_err,
+    *s_hello,
+    *s_overflow,
+    *s_highscore
+;
 
-void _display_set_segments(uint8_t c);
+void display_init(void);
 
 void display_set(uint8_t *);
 

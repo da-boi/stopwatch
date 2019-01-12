@@ -4,9 +4,16 @@
 
 #include "display.h"
 
+void display_set_segments(uint8_t c);
 
 typedef uint8_t dbuffer_t[NUMBER_OF_DIGITS];
 
+uint8_t
+    *s_err          = "err   ",
+    *s_hello        = "hello ",
+    *s_overflow     = "of    ",
+    *s_highscore    = "hi    "
+;
 
 dbuffer_t g_dbuffer = {
 	'0',
@@ -57,7 +64,7 @@ void display_init(void) {
 }
 
 void display_set(uint8_t *str) {
-	if ( strlen(str) !=  NUMBER_OF_DIGITS ) {
+	if ( strlen(str) < NUMBER_OF_DIGITS ) {
 		return;
 	}
 	for (int i=0; i < NUMBER_OF_DIGITS; i++) {
@@ -65,7 +72,7 @@ void display_set(uint8_t *str) {
 	}
 }
 
-void _display_set_segments(uint8_t c) {
+void display_set_segments(uint8_t c) {
 	uint8_t segPort = 0x00;
 
 	switch (c) {
@@ -82,6 +89,7 @@ void _display_set_segments(uint8_t c) {
 		case ' ': segPort = 0x00; break;
 		case 'e': segPort = 0x79; break;
 		case 'h': segPort = 0x76; break;
+        case 'i': segPort = 0x30; break;
 		case 'l': segPort = 0x38; break;
 		case 'o': segPort = 0x5C; break;
 		case 'r': segPort = 0x50; break;
@@ -92,7 +100,6 @@ void _display_set_segments(uint8_t c) {
 }
 
 
-#if 1 
 ISR(TIMER0_OVF_vect) {
 	/* Turn off all digits */
 	PORTC = 0x00;
@@ -104,20 +111,8 @@ ISR(TIMER0_OVF_vect) {
 	}
 
 	/* Set the segments for the next digit */
-	_display_set_segments(g_dbuffer[g_digitIndex]);
+	display_set_segments(g_dbuffer[g_digitIndex]);
 
 	/* Turn on the next digit */
 	PORTC |= (0b1 << g_digitPin[g_digitIndex]);
 }
-#else
-uint8_t g_i = 0;
-ISR(TIMER0_OVF_vect) {
-	if ( g_i == 0 ) {
-		PORTC = 0xFF;
-		g_i = 1;
-	} else {
-		PORTC = 0x00;
-		g_i = 0;
-	}
-}
-#endif

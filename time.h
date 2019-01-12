@@ -15,8 +15,8 @@
 #endif
 #endif
 
-typedef uint64_t micros_t;
-typedef uint64_t millis_t;
+typedef uint64_t Micros;
+typedef uint64_t Millis;
 
 /*
  * Sets up Timer2 for time keeping
@@ -30,20 +30,20 @@ void time_init(void);
  * Resolution: 4us
  * Overflows after ~584,942 years
  */
-micros_t time_get_micros(void);
+Micros time_get_micros(void);
 
 /*
  * Returns time since init()
  *   in milliseconds
  *  Resolution: 1.024ms
  *  Overflows after ~584,942,417 years
- * /
-millis_t time_get_millis(void);
+ */
+Millis time_get_millis(void);
 
 /* Returns after given microseconds */
-void time_delay_micros(micros_t time);
+void time_delay_micros(Micros time);
 
 /* Returns after given milliseconds */
-void time_delay_micros(millis_t time);
+void time_delay_micros(Millis time);
 
 #endif

@@ -20,11 +20,11 @@ void time_init(void) {
 	TIMSK2 = (0b1 << TOIE2);	// Oveflow interrupt enable
 }
 
-micros_t time_get_micros(void) {
+Micros time_get_micros(void) {
 	return ((g_timer2OvfCount << 8) + TCNT2) * 4;
 }
 
-millis_t time_get_millis(void) {
+Millis time_get_millis(void) {
 	return g_timer2OvfCount * 1024 / 1000;
 }
 
