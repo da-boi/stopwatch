@@ -64,9 +64,6 @@ void display_init(void) {
 }
 
 void display_set(uint8_t *str) {
-	if ( strlen(str) < NUMBER_OF_DIGITS ) {
-		return;
-	}
 	for (int i=0; i < NUMBER_OF_DIGITS; i++) {
 		g_dbuffer[i] = str[NUMBER_OF_DIGITS-1 -i];
 	}
