@@ -8,7 +8,7 @@ void display_set_segments(uint8_t c);
 
 typedef uint8_t dbuffer_t[NUMBER_OF_DIGITS];
 
-uint8_t
+const char
     *s_err          = "err   ",
     *s_hello        = "hello ",
     *s_overflow     = "of    ",

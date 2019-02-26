@@ -32,7 +32,7 @@
 #define SEG_G PD6
 
 
-extern uint8_t
+extern const char 
     *s_err,
     *s_hello,
     *s_overflow,
