@@ -1,6 +1,8 @@
 #ifndef STRUTILS_H
 #define STRUTILS_H
 
+#include <stdint.h>
+
 #define ASCII_NUMBER_OFFSET 48
 
 
@@ -24,6 +26,6 @@ char *sinv(char *s);
  * The user must ensure that the buffer 's' is big enough to receive the string
  * Returns the pointer to 's'
  */
-char *utos(char *s, unsigned int u);
+char *utos(char *s, uint64_t u);
 
 #endif

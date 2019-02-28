@@ -41,6 +41,6 @@ extern const char
 
 void display_init(void);
 
-void display_set(uint8_t *);
+void display_set(char *);
 
 #endif

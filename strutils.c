@@ -22,7 +22,7 @@ char *sinv(char *s) {
     return s;
 }
 
-char *utos(char *s, unsigned int u) {
+char *utos(char *s, uint64_t u) {
     int i = 0;
 
     do {

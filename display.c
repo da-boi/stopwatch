@@ -4,7 +4,7 @@
 
 #include "display.h"
 
-void display_set_segments(uint8_t c);
+void display_set_segments(char c);
 
 typedef uint8_t dbuffer_t[NUMBER_OF_DIGITS];
 
@@ -45,17 +45,17 @@ void display_init(void) {
 	 */
 
 	TCCR0A =
-		  (0b0000 << COM0B0)	// Disables all port operations
-		| (0b00 << WGM00)	// Normal mode (WGM02 in TCCR0B also 0)
+		  (0b0000 << COM0B0)    // Disables all port operations
+		| (0b00 << WGM00)       // Normal mode (WGM02 in TCCR0B also 0)
 	;
 	
 	TCCR0B =
-		  (0b0 << WGM02)	// See WGM00 in TCCR0A
-		| (0b011 << CS00)	// Sets prescaler to clk_io/64
+		  (0b0 << WGM02)        // See WGM00 in TCCR0A
+		| (0b010 << CS00)       // Sets prescaler to clk_io/8
 	;
 	
 	TIMSK0 =
-		  (0b1 << TOIE0)	// Enables overflow interrupt
+		  (0b1 << TOIE0)        // Enables overflow interrupt
 	;
 
 	/* Sets all display necessary pins to output */
@@ -63,13 +63,13 @@ void display_init(void) {
 	DDRD = 0xFF;	
 }
 
-void display_set(uint8_t *str) {
+void display_set(char *str) {
 	for (int i=0; i < NUMBER_OF_DIGITS; i++) {
 		g_dbuffer[i] = str[NUMBER_OF_DIGITS-1 -i];
 	}
 }
 
-void display_set_segments(uint8_t c) {
+void display_set_segments(char c) {
 	uint8_t segPort = 0x00;
 
 	switch (c) {

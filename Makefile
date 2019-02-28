@@ -40,12 +40,15 @@ clean:
 		rm -R ./target
 
 run: ./target/$(TARGET).hex
-		avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) -U flash:w:$<
+		avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) \
+				-U lfuse:w:0x7F:m \
+				-U flash:w:$<
 
 .PHONY: size clean run
 
 #{{{ dependencies
 ./target/display.o:		display.c display.h
 ./target/main.o:		main.c
+./target/strutils.o:	strutils.c strutils.h
 ./target/time.o:		time.c time.h
 #}}}

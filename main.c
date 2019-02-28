@@ -1,33 +1,36 @@
+#define F_CPU 2000000UL
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "time.h"
 #include "display.h"
+#include "strutils.h"
+#include "time.h"
+
 
 char *time_to_string(char *buffer, Millis t);
 
 int main(void) {
+    char tstring[32];
+
     time_init();
-	display_init();
+    display_init();
 	sei();
 
-    display_set(s_hello);
+    while (1) {
+        display_set(time_to_string(tstring, time_get_millis()/10));
+    }
 
-    char s[7];
-
-    Millis t = 0;
-
-	while (1) {
-        // display_set(time_to_string(s, time_get_millis()));
-	}
-	return 0;
+    return 0;
 }
 
 char *time_to_string(char *buffer, Millis t) {
-    if (sprintf(buffer, "%06u", (unsigned int)t) < 0) {
-        buffer = s_err;
-    }
+    char tmp[32];
+    
+    utos(tmp, (uint64_t) t);
+    spad(buffer, tmp, ' ', 6);
+
     return buffer;
 }
