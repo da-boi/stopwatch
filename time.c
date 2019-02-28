@@ -7,17 +7,14 @@
 uint64_t g_timer2OvfCount = 0;
 
 void time_init(void) {
-	TCCR2A =
-		  (0b0000 << COM2B0)	// Disable all port operation
-		| (0b00 << WGM20)	// Normal mode (also WGM2 in TCCR2B)
-	;
+    TCCR2 =
+          (0b00 << COM20)       // Disable all port operation
+        | (0b0 << WGM20)        // Normal mode (also WGM21)
+        | (0b0 << WGM21)
+        | (0b010 << CS20)       // clk_T2S/8
+    ;
 
-	TCCR2B =
-		  (0b0 << WGM22)		// See WGM0 in TCCR2A
-		| (0b010 << CS20)	// Clk_io/8
-	;
-
-	TIMSK2 = (0b1 << TOIE2);	// Oveflow interrupt enable
+    TIMSK |= (0b1 << TOIE2);    // Overflow interrupt enable
 }
 
 Micros time_get_micros(void) {

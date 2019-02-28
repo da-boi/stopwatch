@@ -40,24 +40,16 @@ void display_init(void) {
 	/*
 	 * Sets up Timer/Counter0 as input
 	 *   for the multiplexer
-	 * Creates an overlow interrupt every 2^16 ticks
-	 *   assuming F_CPU 16MHz -> ~244Hz
-	 */
+     */
+    
+    TCCR0 =
+          (0b010    << CS00)    // clk_io/8
+    ;
 
-	TCCR0A =
-		  (0b0000 << COM0B0)    // Disables all port operations
-		| (0b00 << WGM00)       // Normal mode (WGM02 in TCCR0B also 0)
-	;
-	
-	TCCR0B =
-		  (0b0 << WGM02)        // See WGM00 in TCCR0A
-		| (0b010 << CS00)       // Sets prescaler to clk_io/8
-	;
-	
-	TIMSK0 =
-		  (0b1 << TOIE0)        // Enables overflow interrupt
-	;
-
+    TIMSK |=
+          (0b1      << TOIE0)   // Enable overflow interrupt
+    ;
+    
 	/* Sets all display necessary pins to output */
 	DDRC = 0xFF;
 	DDRD = 0xFF;	

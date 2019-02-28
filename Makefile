@@ -1,14 +1,14 @@
 TARGET = stopwatch
 
 CFLAGS = -Wall -g
-CMMCU = atmega328p
+CMMCU = atmega8
 
 LFLAGS =
 
 PROG = avrispv2
 PPORT = -P /dev/ttyACM0
 PBAUD = # -B 115200
-PMMCU = m328p
+PMMCU = m8
 PFLAGS = -v
 
 OBJECTS = $(addprefix ./target/,$(patsubst %.c,%.o,$(wildcard *.c)))
