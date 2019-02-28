@@ -7,11 +7,12 @@
 #include <stdlib.h>
 
 #include "display.h"
+#include "input.h"
 #include "strutils.h"
 #include "time.h"
 
 
-#define EEPROM_HIGHSCORE = (const void *) 0;
+#define EEPROM_HIGHSCORE (void *) 0
 
 
 char *time_to_string(char *buffer, Millis t);
@@ -37,7 +38,7 @@ int main(void) {
             
             /* -------------------------------------------------------------- */
             case IDLE:
-                display_set(time_to_string(tstring, highscore);
+                display_set(time_to_string(tstring, highscore));
                 
                 if (START == PRESSED) {
                     state = STARTED;
@@ -103,7 +104,7 @@ Millis get_highscore(void) {
     Millis highscore = 0;
 
     eeprom_read_block(
-            (void *) highscore,
+            (void *) &highscore,
             EEPROM_HIGHSCORE,
             sizeof(Millis)
     );
@@ -113,7 +114,7 @@ Millis get_highscore(void) {
 
 void store_highscore(Millis highscore) {
     eeprom_update_block(
-            (void *) &((Millis) 0),
+            (void *) &highscore,
             EEPROM_HIGHSCORE,
             sizeof(Millis)
     );

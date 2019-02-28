@@ -48,6 +48,7 @@ run: ./target/$(TARGET).hex
 
 #{{{ dependencies
 ./target/display.o:		display.c display.h
+./target/input.o:		input.c input.h
 ./target/main.o:		main.c
 ./target/strutils.o:	strutils.c strutils.h
 ./target/time.o:		time.c time.h

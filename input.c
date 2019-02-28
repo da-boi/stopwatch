@@ -4,7 +4,7 @@
 #include "input.h"
 
 
-inline void input_init(void) {
+void input_init(void) {
     SFIOR |=
           (1 << PUD)
     ;

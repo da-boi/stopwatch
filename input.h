@@ -16,6 +16,6 @@
 
 #define PRESSED 1
 
-inline void input_init(void);
+void input_init(void);
 
 #endif /* INPUT_H */
