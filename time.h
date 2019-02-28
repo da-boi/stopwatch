@@ -25,6 +25,11 @@ typedef uint64_t Millis;
 void time_init(void);
 
 /*
+ * Resets the time origin
+ */
+void time_reset(void);
+
+/*
  * Returns time since init()
  *   in microseconds
  * Resolution: 4us
