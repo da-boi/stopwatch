@@ -39,12 +39,18 @@ size: ./target/$(TARGET).elf
 clean:
 	rm -R ./target
 
-run: hex
+run: .target/$(TARGET).hex
 	avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) \
 		-U lfuse:w:0x7F:m \
 		-U flash:w:$<
 
-.PHONY: size clean run
+.PHONY: \
+	all \
+	clean \
+	eeprom \
+	hex \
+	run \
+	size
 
 #{{{ dependencies
 ./target/display.o:	display.c display.h
