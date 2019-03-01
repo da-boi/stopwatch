@@ -28,7 +28,7 @@ int main(void) {
 
     time_init();
     display_init();
-	sei();
+    sei();
     input_init();
 
     highscore = get_highscore();

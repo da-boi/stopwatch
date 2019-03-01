@@ -23,13 +23,13 @@ void time_reset(void) {
 }
 
 Micros time_get_micros(void) {
-	return ((g_timer2OvfCount << 8) + TCNT2) * 4;
+    return ((g_timer2OvfCount << 8) + TCNT2) * 4;
 }
 
 Millis time_get_millis(void) {
-	return g_timer2OvfCount * 1024 / 1000;
+    return g_timer2OvfCount * 1024 / 1000;
 }
 
 ISR(TIMER2_OVF_vect) {
-	g_timer2OvfCount++;
+    g_timer2OvfCount++;
 }

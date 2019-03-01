@@ -21,35 +21,35 @@ hex: ./target/$(TARGET).hex
 eeprom: ./target/$(TARGET).eep.hex
 
 ./target/$(TARGET).hex: ./target/$(TARGET).elf
-		avr-objcopy -j .text -j .data -O ihex $< $@
+	avr-objcopy -j .text -j .data -O ihex $< $@
 
 ./target/$(TARGET).eep.hex: ./target/$(TARGET).elf
-		avr-objcopy -j .eeprom --change-section-lma .eeprom=1 -O ihex $< $@
+	avr-objcopy -j .eeprom --change-section-lma .eeprom=1 -O ihex $< $@
 
 ./target/$(TARGET).elf: $(OBJECTS)
-		avr-gcc $(LFLAGS) -mmcu=$(CMMCU) -o $@ $^
+	avr-gcc $(LFLAGS) -mmcu=$(CMMCU) -o $@ $^
 
 ./target/%.o: %.c
-		mkdir -p ./target/
-		avr-gcc -c $(CFLAGS) -mmcu=$(CMMCU) -o $@ $<
+	mkdir -p ./target/
+	avr-gcc -c $(CFLAGS) -mmcu=$(CMMCU) -o $@ $<
 
 size: ./target/$(TARGET).elf
-		avr-size --mcu=$(CMMCU) -C $<
+	avr-size --mcu=$(CMMCU) -C $<
 
 clean:
-		rm -R ./target
+	rm -R ./target
 
-run: ./target/$(TARGET).hex
-		avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) \
-				-U lfuse:w:0x7F:m \
-				-U flash:w:$<
+run: hex
+	avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) \
+		-U lfuse:w:0x7F:m \
+		-U flash:w:$<
 
 .PHONY: size clean run
 
 #{{{ dependencies
-./target/display.o:		display.c display.h
-./target/input.o:		input.c input.h
-./target/main.o:		main.c
+./target/display.o:	display.c display.h
+./target/input.o:	input.c input.h
+./target/main.o:	main.c
 ./target/strutils.o:	strutils.c strutils.h
-./target/time.o:		time.c time.h
+./target/time.o:	time.c time.h
 #}}}
