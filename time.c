@@ -8,10 +8,10 @@ uint64_t g_timer2OvfCount = 0;
 
 void time_init(void) {
     TCCR2 =
-          (0b00 << COM20)       // Disable all port operation
-        | (0b0 << WGM20)        // Normal mode (also WGM21)
-        | (0b0 << WGM21)
-        | (0b010 << CS20)       // clk_T2S/8
+          (0b00     << COM20)       // Disable all port operation
+        | (0b0      << WGM20)        // Normal mode (also WGM21)
+        | (0b0      << WGM21)
+        | (0b100    << CS20)       // clk_T2S/64
     ;
 
     TIMSK |= (0b1 << TOIE2);    // Overflow interrupt enable

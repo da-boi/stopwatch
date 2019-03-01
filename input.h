@@ -10,11 +10,11 @@
 #define RESET_P     PB1
 #define STOP_P      PB2
 
-#define START   (INPUT_PIN && (1 << START_P))
-#define RESET   (INPUT_PIN && (1 << RESET_P))
-#define STOP    (INPUT_PIN && (1 << STOP_P))
+#define START   (INPUT_PIN & (1 << START_P))
+#define RESET   (INPUT_PIN & (1 << RESET_P))
+#define STOP    (INPUT_PIN & (1 << STOP_P))
 
-#define PRESSED 1
+#define PRESSED 0
 
 void input_init(void);
 

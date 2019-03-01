@@ -43,7 +43,7 @@ void display_init(void) {
      */
     
     TCCR0 =
-          (0b010    << CS00)    // clk_io/8
+          (0b011    << CS00)    // 
     ;
 
     TIMSK |=

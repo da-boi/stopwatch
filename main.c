@@ -5,6 +5,7 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "display.h"
 #include "input.h"
@@ -22,6 +23,7 @@ void store_highscore(Millis highscore);
 int main(void) {
     enum {IDLE, STARTED, STOPPED} state = IDLE;
     char tstring[32];
+    char hstring[32];
     Millis highscore = 0;
     Millis time = 0;
     Millis t0 = 0;
@@ -32,13 +34,24 @@ int main(void) {
     input_init();
 
     highscore = get_highscore();
+    if (highscore == 0) {
+        strcpy(hstring, "h ----");
+    } else {
+        time_to_string(hstring, highscore/100);
+        hstring[0] = 'h';
+    }
+
+    display_set("hello ");
+    t0 = time_get_millis();
+    while ((time_get_millis() - t0) < 1000);
+
 
     while (1) {
         switch (state) {
             
             /* -------------------------------------------------------------- */
             case IDLE:
-                display_set(time_to_string(tstring, highscore));
+                display_set(hstring);
                 
                 if (START == PRESSED) {
                     state = STARTED;
@@ -50,21 +63,32 @@ int main(void) {
                     while (RESET == PRESSED) {
                         if ((time_get_millis() - t0) > 3000) {
                             store_highscore(0);
+                            highscore = 0;
+                            strcpy(hstring, "h ----");
+                            display_set(hstring);
+                            break;
                         }
                     }
+                    while (RESET == PRESSED);
+                    
                 }
 
                 break;
 
             /* -------------------------------------------------------------- */
             case STARTED:
-                display_set(time_to_string(tstring, time_get_millis()));
+                display_set(time_to_string(tstring, time_get_millis()/100));
 
                 if (STOP == PRESSED) {
                     state = STOPPED;
                     time = time_get_millis();
-                    if (time < highscore) {
+                    display_set(time_to_string(tstring, time/100));
+                    if (highscore == 0
+                     || time < highscore) {
                         store_highscore(time);
+                        highscore = time;
+                        time_to_string(hstring, highscore/100);
+                        hstring[0] = 'h';
                     }
                 }
 
@@ -72,10 +96,10 @@ int main(void) {
 
             /* -------------------------------------------------------------- */
             case STOPPED:
-                display_set(time_to_string(tstring, time));
-
                 if (RESET == PRESSED) {
                     state = IDLE;
+                    t0 = time_get_millis();
+                    while ((time_get_millis() - t0) < 500);
                 }
 
                 break;
@@ -95,6 +119,8 @@ char *time_to_string(char *buffer, Millis t) {
     char tmp[32];
     
     utos(tmp, (uint64_t) t);
+    spad(buffer, tmp, '0', 2);
+    strncpy(tmp, buffer, 32);
     spad(buffer, tmp, ' ', 6);
 
     return buffer;

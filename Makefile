@@ -39,15 +39,20 @@ size: ./target/$(TARGET).elf
 clean:
 	rm -R ./target
 
-run: .target/$(TARGET).hex
+run: ./target/$(TARGET).hex
+	avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) -U flash:w:$<
+
+fuses:
 	avrdude $(PFLAGS) -c $(PROG) $(PPORT) $(PBAUD) -p $(PMMCU) \
-		-U lfuse:w:0x7F:m \
-		-U flash:w:$<
+		-U lfuse:w:0xEF:m \
+		-U hfuse:w:0xD9:m
+
 
 .PHONY: \
 	all \
 	clean \
 	eeprom \
+	fuses \
 	hex \
 	run \
 	size
