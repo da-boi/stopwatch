@@ -15,7 +15,6 @@
 #endif
 #endif
 
-typedef uint64_t Micros;
 typedef uint64_t Millis;
 
 /*
@@ -31,24 +30,20 @@ void time_reset(void);
 
 /*
  * Returns time since init()
- *   in microseconds
- * Resolution: 4us
- * Overflows after ~584,942 years
- */
-Micros time_get_micros(void);
-
-/*
- * Returns time since init()
  *   in milliseconds
  *  Resolution: 1.024ms
  *  Overflows after ~584,942,417 years
  */
-Millis time_get_millis(void);
+Millis time_get(void);
 
-/* Returns after given microseconds */
-void time_delay_micros(Micros time);
+/*
+ * Sets the time
+ */
+void time_set(Millis t);
 
 /* Returns after given milliseconds */
-void time_delay_micros(Millis time);
+void time_delay(Millis t);
+
+char *time_to_string(char *buffer, Millis t);
 
 #endif
