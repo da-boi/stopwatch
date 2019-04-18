@@ -4,18 +4,8 @@
 
 #include "display.h"
 
-void display_set_segments(char c);
 
-typedef uint8_t dbuffer_t[NUMBER_OF_DIGITS];
-
-const char
-    *s_err          = "err   ",
-    *s_hello        = "hello ",
-    *s_overflow     = "of    ",
-    *s_highscore    = "hi    "
-;
-
-dbuffer_t g_dbuffer = {
+char G_dbuffer[NUMBER_OF_DIGITS] = {
     '0',
     '0',
     '0',
@@ -24,7 +14,7 @@ dbuffer_t g_dbuffer = {
     '0'
 };
 
-uint8_t g_digitPin[] = {
+uint8_t G_digitPin[] = {
     DIGIT_0,
     DIGIT_1,
     DIGIT_2,
@@ -33,7 +23,7 @@ uint8_t g_digitPin[] = {
     DIGIT_5
 };
 
-uint8_t g_digitIndex = 0;
+uint8_t G_digitIndex = 0;
 
 
 void display_init(void) {
@@ -47,62 +37,56 @@ void display_init(void) {
     ;
 
     TIMSK |=
-          (0b1      << TOIE0)   // Enable overflow interrupt
+          (0b1      << TOIE0)   // Enables overflow interrupt
     ;
     
     /* Sets all display necessary pins to output */
-    DDRC = 0xFF;
-    DDRD = 0xFF;    
+    DIGIT_DDR   = 0xFF;
+    SEG_DDR     = 0xFF;    
 }
 
 void display_set(char *str) {
     for (int i=0; i < NUMBER_OF_DIGITS; i++) {
-        g_dbuffer[i] = str[NUMBER_OF_DIGITS-1 -i];
+        G_dbuffer[i] = str[NUMBER_OF_DIGITS-1 -i];
     }
-}
+}   
 
-void display_set_segments(char c) {
-    uint8_t segPort = 0x00;
-
+void _display_set_segments(char c) {
     switch (c) {
-        case '-': segPort = 0x40; break;
-        case '0': segPort = 0x3F; break;
-        case '1': segPort = 0x06; break;
-        case '2': segPort = 0x5B; break;
-        case '3': segPort = 0x4F; break;
-        case '4': segPort = 0x66; break;
-        case '5': segPort = 0x6D; break;
-        case '6': segPort = 0x7D; break;
-        case '7': segPort = 0x07; break;
-        case '8': segPort = 0x7F; break;
-        case '9': segPort = 0x6F; break;
-        case ' ': segPort = 0x00; break;
-        case 'e': segPort = 0x79; break;
-        case 'h': segPort = 0x76; break;
-        case 'i': segPort = 0x30; break;
-        case 'l': segPort = 0x38; break;
-        case 'o': segPort = 0x5C; break;
-        case 'r': segPort = 0x50; break;
-        default: segPort = 0x08; break; // '_'
+        case ' ': SEG_PORT = 0x00; break;
+        case '-': SEG_PORT = 0x40; break;
+        case '0': SEG_PORT = 0x3F; break;
+        case '1': SEG_PORT = 0x06; break;
+        case '2': SEG_PORT = 0x5B; break;
+        case '3': SEG_PORT = 0x4F; break;
+        case '4': SEG_PORT = 0x66; break;
+        case '5': SEG_PORT = 0x6D; break;
+        case '6': SEG_PORT = 0x7D; break;
+        case '7': SEG_PORT = 0x07; break;
+        case '8': SEG_PORT = 0x7F; break;
+        case '9': SEG_PORT = 0x6F; break;
+        case 'e': SEG_PORT = 0x79; break;
+        case 'h': SEG_PORT = 0x76; break;
+        case 'i': SEG_PORT = 0x30; break;
+        case 'l': SEG_PORT = 0x38; break;
+        case 'o': SEG_PORT = 0x5C; break;
+        case 'r': SEG_PORT = 0x50; break;
+        default:  SEG_PORT = 0x08; break; // '_'
     }
-
-    PORTD = segPort;
 }
 
 
 ISR(TIMER0_OVF_vect) {
     /* Turn off all digits */
-    PORTC = 0x00;
-
-    /* Next digit */
-    g_digitIndex++;
-    if ( g_digitIndex == NUMBER_OF_DIGITS ) {
-        g_digitIndex = 0;
-    }
+    DIGIT_PORT = 0x00;
 
     /* Set the segments for the next digit */
-    display_set_segments(g_dbuffer[g_digitIndex]);
+    G_digitIndex++;
+    if ( G_digitIndex == NUMBER_OF_DIGITS ) {
+        G_digitIndex = 0;
+    }
+    _display_set_segments(G_dbuffer[G_digitIndex]);
 
     /* Turn on the next digit */
-    PORTC |= (0b1 << g_digitPin[g_digitIndex]);
+    DIGIT_PORT |= (0b1 << G_digitPin[G_digitIndex]);
 }

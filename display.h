@@ -9,10 +9,10 @@
 
 #define NUMBER_OF_DIGITS 6
 
-#define SEG_PORT PORTD
-#define SEG_DDR DDRD
-#define DIGIT_PORT PORTC
-#define DIGIT_DDR DDRC
+#define SEG_PORT    PORTD
+#define SEG_DDR     DDRD
+#define DIGIT_PORT  PORTC
+#define DIGIT_DDR   DDRC
 
 /* Digit pins */
 #define DIGIT_0 PC0
@@ -31,16 +31,13 @@
 #define SEG_F PD5
 #define SEG_G PD6
 
-
-extern const char 
-    *s_err,
-    *s_hello,
-    *s_overflow,
-    *s_highscore
-;
-
+/*
+ * this function needs to be called for the display to work
+ */
 void display_init(void);
 
 void display_set(char *);
+
+void _display_set_segments(char c);
 
 #endif
