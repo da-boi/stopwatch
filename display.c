@@ -5,7 +5,7 @@
 #include "display.h"
 
 
-char G_dbuffer[NUMBER_OF_DIGITS] = {
+char G_dbuffer[] = {
     '0',
     '0',
     '0',
@@ -66,6 +66,7 @@ void _display_set_segments(char c) {
         case '8': SEG_PORT = 0x7F; break;
         case '9': SEG_PORT = 0x6F; break;
         case 'e': SEG_PORT = 0x79; break;
+        case 'a': SEG_PORT = 0x77; break;
         case 'h': SEG_PORT = 0x76; break;
         case 'i': SEG_PORT = 0x30; break;
         case 'l': SEG_PORT = 0x38; break;
@@ -81,10 +82,7 @@ ISR(TIMER0_OVF_vect) {
     DIGIT_PORT = 0x00;
 
     /* Set the segments for the next digit */
-    G_digitIndex++;
-    if ( G_digitIndex == NUMBER_OF_DIGITS ) {
-        G_digitIndex = 0;
-    }
+    G_digitIndex = (G_digitIndex + 1) % NUMBER_OF_DIGITS;
     _display_set_segments(G_dbuffer[G_digitIndex]);
 
     /* Turn on the next digit */

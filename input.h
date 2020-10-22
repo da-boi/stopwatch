@@ -13,8 +13,12 @@
 #define START   (INPUT_PIN & (1 << START_P))
 #define RESET   (INPUT_PIN & (1 << RESET_P))
 #define STOP    (INPUT_PIN & (1 << STOP_P))
+#define UP      RESET
+#define DOWN    STOP
 
 #define PRESSED 0
+
+#define DEBOUNCE_DELAY 50 
 
 void input_init(void);
 
