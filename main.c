@@ -14,15 +14,18 @@
 #define false 0
 #define BOOL int
 
+void display_counter(int l, int r, int side);
+int mod(int a, int b);
+enum {LEFT, RIGHT} side = LEFT;
+
 int main(void) {
     enum {CLOCK, COUNTER, SPRINTZ} mode = CLOCK;
     enum {IDLE, STARTED, STOPPED} state = IDLE;
-    enum {LEFT, RIGHT} side = LEFT;
     char tstring[32];
     Millis time = 0;
     Millis t0 = 0;
     Millis t1 = 0;
-    unsigned int counter[2] = {0, 0};
+    int counter[2] = {0, 0};
     BOOL wasReleased = false;
     BOOL aua = false;
 
@@ -30,7 +33,7 @@ int main(void) {
     display_init();
     sei();
     input_init();
-
+/*
     display_set("budder");
     time_delay(1000);
     display_set("bei   ");
@@ -39,7 +42,7 @@ int main(void) {
     time_delay(1000);
     display_set("fische");
     time_delay(1000);
-
+*/
     t0 = time_get();
 
     while (START == PRESSED) {
@@ -147,41 +150,52 @@ int main(void) {
         /* ################################################################## */
         case COUNTER:
 
-            
-            #define INC_COUNTER counter[side] = (counter[side] + 1) % MAX_COUNT;
-            #define DEC_COUNTER counter[side] = (counter[side] - 1) % MAX_COUNT;
+                
+            #define INC_COUNTER counter[side] = mod((counter[side] + 1), MAX_COUNT);
+            #define DEC_COUNTER counter[side] = mod((counter[side] - 1), MAX_COUNT);
 
             display_set("00- 00");
 
+            while(START == PRESSED);
+
             while (1) {
 
-                if (START == PRESSED) {
+                if (START == PRESSED
+                    && time_get() - t0 > DEBOUNCE_DELAY
+                    && wasReleased == true) {
+                    wasReleased = false;
+                    t0 = time_get();
                     side = (side + 1) % 2;
-                    time_delay(DEBOUNCE_DELAY);
+                    display_counter(counter[LEFT], counter[RIGHT], side);
                 }
 
-                else if (UP == PRESSED) {
+                if (START != PRESSED) wasReleased = true;
+
+                if (UP == PRESSED) {
                     t0 = time_get();
                     INC_COUNTER; 
+                    display_counter(counter[LEFT], counter[RIGHT], side);
                     while (UP == PRESSED) {
                         if ((time_get() - t0) > 1000) {
                             INC_COUNTER;
-                            time_delay(100);
+                            display_counter(counter[LEFT], counter[RIGHT], side);
+                            time_delay(67);
                         }
                     }
                 } 
 
-                else if (DOWN == PRESSED) {
+                if (DOWN == PRESSED) {
                     t0 = time_get();
                     DEC_COUNTER; 
-                    while (UP == PRESSED) {
+                    display_counter(counter[LEFT], counter[RIGHT], side);
+                    while (DOWN == PRESSED) {
                         if ((time_get() - t0) > 1000) {
                             DEC_COUNTER;
-                            time_delay(100);
+                            display_counter(counter[LEFT], counter[RIGHT], side);
+                            time_delay(67);
                         }
                     }
                 } 
-
             }
 
             break;
@@ -248,4 +262,29 @@ int main(void) {
     }
 
     return 0;
+}
+
+
+void display_counter(int l, int r, int side){
+        char left[3];
+        char right[3];
+        char pleft[3];
+        char pright[3];
+        char str[7];
+
+        utos(left, (uint64_t) l);
+        utos(right, (uint64_t) r);
+        spad(pleft, left, '0', 2);
+        spad(pright, right, '0', 2);
+        strcpy(str, pleft);
+        if (side == LEFT)   strcat(str, "- ");
+        else                strcat(str, " -");
+        strcat(str, pright) ;
+
+        display_set(str);
+}
+
+int mod(int a, int b) {
+    int r = a % b;
+    return r < 0 ? r + b : r;
 }
