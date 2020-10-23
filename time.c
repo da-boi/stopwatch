@@ -6,7 +6,7 @@
 #include "time.h"
 
 
-uint64_t g_timer2OvfCount = 0;
+volatile uint64_t g_timer2OvfCount = 0;
 
 void time_init(void) {
     TCCR2 =
@@ -43,7 +43,7 @@ char *time_to_string(char *buffer, Millis t) {
     char tmp[32];
     
     utos(tmp, (uint64_t) t);
-    spad(buffer, tmp, '0', 2);
+    spad(buffer, tmp, '0', 3);
     strncpy(tmp, buffer, 32);
     spad(buffer, tmp, ' ', 6);
 

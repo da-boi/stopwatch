@@ -16,8 +16,8 @@
 
 /* Digit pins */
 #define DIGIT_0 PC0
-#define DIGIT_1 PC1
-#define DIGIT_2 PC2
+#define DIGIT_1 PC2
+#define DIGIT_2 PC1
 #define DIGIT_3 PC3
 #define DIGIT_4 PC4
 #define DIGIT_5 PC5

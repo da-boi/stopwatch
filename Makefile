@@ -1,6 +1,6 @@
 TARGET = stopwatch
 
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Os
 CMMCU = atmega8
 
 LFLAGS =

@@ -18,7 +18,8 @@
 
 #define PRESSED 0
 
-#define DEBOUNCE_DELAY 50 
+#define DEBOUNCE_DELAY 600
+#define DEBOUNCED time_get() - t0 > DEBOUNCE_DELAY
 
 void input_init(void);
 

@@ -15,7 +15,7 @@
 #endif
 #endif
 
-typedef uint64_t Millis;
+typedef volatile uint64_t Millis;
 
 /*
  * Sets up Timer2 for time keeping

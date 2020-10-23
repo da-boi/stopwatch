@@ -66,12 +66,38 @@ void _display_set_segments(char c) {
         case '8': SEG_PORT = 0x7F; break;
         case '9': SEG_PORT = 0x6F; break;
         case 'e': SEG_PORT = 0x79; break;
-        case 'a': SEG_PORT = 0x77; break;
-        case 'h': SEG_PORT = 0x76; break;
+        case 'A': SEG_PORT = 0x77; break;
+        case 'a': SEG_PORT = 0x5F; break;
+        case 'B':
+        case 'b': SEG_PORT = 0x7C; break;
+        case 'C': SEG_PORT = 0x39; break;
+        case 'c': SEG_PORT = 0x58; break;
+        case 'D':
+        case 'd': SEG_PORT = 0x5E; break;
+        case 'F': SEG_PORT = 0x71; break;
+        case 'f': SEG_PORT = 0x71; break;
+        case 'H': SEG_PORT = 0x76; break;
+        case 'h': SEG_PORT = 0x74; break;
+        case 'I': SEG_PORT = 0x30; break;
         case 'i': SEG_PORT = 0x30; break;
+        case 'L': SEG_PORT = 0x38; break;
         case 'l': SEG_PORT = 0x38; break;
+        case 'O': SEG_PORT = 0x3F; break;
         case 'o': SEG_PORT = 0x5C; break;
+        case 'P': SEG_PORT = 0x73; break;
+        case 'p': SEG_PORT = 0x73; break;
+        case 'Q':
+        case 'q': SEG_PORT = 0x73; break;
+        case 'R':
         case 'r': SEG_PORT = 0x50; break;
+        case 'S': SEG_PORT = 0x6D; break;
+        case 's': SEG_PORT = 0x6D; break;
+        case 'T':
+        case 't': SEG_PORT = 0x78; break;
+        case 'U': SEG_PORT = 0x3E; break;
+        case 'u': SEG_PORT = 0x1C; break;
+        case 'Y':
+        case 'y': SEG_PORT = 0x6E; break;
         default:  SEG_PORT = 0x08; break; // '_'
     }
 }
