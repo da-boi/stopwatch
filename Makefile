@@ -56,7 +56,7 @@ fuses:
 ./target/display.o:	display.c display.h
 ./target/input.o:	input.c input.h
 ./target/highscore.o:	highscore.c highscore.h
-./target/main.o:	main.c
+./target/main.o:	main.c display.h input.h strutils.h time.h
 ./target/strutils.o:	strutils.c strutils.h
 ./target/time.o:	time.c time.h
 #}}}

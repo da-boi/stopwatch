@@ -33,7 +33,7 @@ int main(void) {
     display_init();
     sei();
     input_init();
-/*
+
     display_set("budder");
     time_delay(1000);
     display_set("bei   ");
@@ -42,7 +42,7 @@ int main(void) {
     time_delay(1000);
     display_set("fische");
     time_delay(1000);
-*/
+
     t0 = time_get();
 
     while (START == PRESSED) {
@@ -212,14 +212,16 @@ int main(void) {
                         display_set(" SAUF ");
                         
                         if (START == PRESSED && time_get() - t0 > DEBOUNCE_DELAY) {
-                            state = STARTED;
                             t0 = time_get();
-                            display_set("  33  ");
-                            time_delay(1000);
-                            display_set("  22  ");
-                            time_delay(1000);
-                            display_set("  11  ");
-                            time_delay(1000);
+                            display_set("HALTEN");
+                            while (START == PRESSED) {
+                                if ((time_get() - t0) > 1000) {
+                                    state = STARTED;
+                                    display_set(" LOS  ");
+                                    break;
+                                }
+                            }
+                            while (START == PRESSED);
                             time = time_get();
                         }
 

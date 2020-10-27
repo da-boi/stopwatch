@@ -65,7 +65,6 @@ void _display_set_segments(char c) {
         case '7': SEG_PORT = 0x07; break;
         case '8': SEG_PORT = 0x7F; break;
         case '9': SEG_PORT = 0x6F; break;
-        case 'e': SEG_PORT = 0x79; break;
         case 'A': SEG_PORT = 0x77; break;
         case 'a': SEG_PORT = 0x5F; break;
         case 'B':
@@ -73,6 +72,8 @@ void _display_set_segments(char c) {
         case 'C': SEG_PORT = 0x39; break;
         case 'c': SEG_PORT = 0x58; break;
         case 'D':
+        case 'E': SEG_PORT = 0x79; break;
+        case 'e': SEG_PORT = 0x79; break;
         case 'd': SEG_PORT = 0x5E; break;
         case 'F': SEG_PORT = 0x71; break;
         case 'f': SEG_PORT = 0x71; break;
@@ -82,6 +83,8 @@ void _display_set_segments(char c) {
         case 'i': SEG_PORT = 0x30; break;
         case 'L': SEG_PORT = 0x38; break;
         case 'l': SEG_PORT = 0x38; break;
+        case 'N':
+        case 'n': SEG_PORT = 0x54; break;
         case 'O': SEG_PORT = 0x3F; break;
         case 'o': SEG_PORT = 0x5C; break;
         case 'P': SEG_PORT = 0x73; break;
